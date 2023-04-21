@@ -56,9 +56,9 @@ namespace CodingAssessment.Test.IntegrationTest
         {
             // Arrange
             var createPersonDto = new Api.DTOs.CreatePersonDto("John Doe", 38, Convert.ToDateTime("1985-09-04"));
-            var person = new PersonDto(Guid.NewGuid(), "John Doe", 38, Convert.ToDateTime("1985-09-04"));
+            var createPersonResultDto = new CreatePersonResultDto(Guid.NewGuid());
             var mockPersonService = new Mock<IPerson>();
-            mockPersonService.Setup(x => x.Insert(createPersonDto)).ReturnsAsync(person);
+            mockPersonService.Setup(x => x.Insert(createPersonDto)).ReturnsAsync(createPersonResultDto);
             HttpClient client = CreateClient(mockPersonService);
 
             // Act
@@ -67,11 +67,11 @@ namespace CodingAssessment.Test.IntegrationTest
             // Assert
             response.EnsureSuccessStatusCode(); // Status Code 200-299
             var responseContent = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<CreatePersonDto>(responseContent);
+            var result = JsonConvert.DeserializeObject<CreatePersonResultDto>(responseContent);
 
             Assert.NotNull(result);
             Assert.NotNull(result?.PersonId);
-            Assert.Equal(person.Id, result.PersonId);
+            Assert.Equal(createPersonResultDto.PersonId, result.PersonId);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
@@ -114,11 +114,5 @@ namespace CodingAssessment.Test.IntegrationTest
                 });
             }).CreateClient();
         }
-    }
-
-
-    public class CreatePersonDto
-    {
-        public Guid PersonId { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace CodingAssessment.Api.Services
         }
 
         /// <inheritdoc/>
-        public async Task<PersonDto> Insert(CreatePersonDto createPersonDto)
+        public async Task<CreatePersonResultDto> Insert(CreatePersonDto createPersonDto)
         {
             if (await Task.FromResult(_data.Any(p => p.Name == createPersonDto.Name)))
                 throw new ConflictException($"Person name {createPersonDto.Name} already exist");
@@ -44,7 +44,7 @@ namespace CodingAssessment.Api.Services
 
             _data.Add(person);
 
-            return new PersonDto(person.Id, person.Name, person.Age, person.DateOfBirth);
+            return new CreatePersonResultDto(person.Id);
         }
 
         /// <inheritdoc/>

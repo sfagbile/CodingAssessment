@@ -16,7 +16,7 @@ namespace CodingAssessment.Api.Services
         /// </summary>
         /// <param name="person"></param>
         /// <returns></returns>
-        Task<PersonDto> Insert(CreatePersonDto person);
+        Task<CreatePersonResultDto> Insert(CreatePersonDto person);
 
         /// <summary>
         /// Get all person

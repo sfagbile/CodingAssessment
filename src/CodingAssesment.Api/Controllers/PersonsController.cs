@@ -19,7 +19,7 @@ namespace CodingAssessment.Api.Controllers
         /// <summary>
         /// Get person by id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="personId"></param>
         /// <returns></returns>
         [HttpGet("{personId}")]
         [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]
@@ -35,14 +35,17 @@ namespace CodingAssessment.Api.Controllers
         /// </summary>
         /// <param name="createPersonDto"></param>
         /// <returns></returns>
+        /// <remarks>
+        /// POST /Persons { "name": "John Doe", "age": 38, "dateOfBirth": "1985-02-01"}
+        /// </remarks>
         [HttpPost]
         [ProducesResponseType(typeof(PersonDto), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> Create([FromBody] CreatePersonDto createPersonDto)
         {
-            var person = await _person.Insert(createPersonDto);
-            return CreatedAtAction(nameof(GetById), new { personId = person.Id }, new { personId = person.Id });
+            var createPersonResultDto = await _person.Insert(createPersonDto);
+            return CreatedAtAction(nameof(GetById), createPersonResultDto, createPersonResultDto);
         }
 
         /// <summary>
